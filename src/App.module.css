@@ -8,8 +8,36 @@ body {
 .app {
 	padding: 2rem;
 	text-align: center;
+	margin-top: 5px;
+}
+.todoElement {
+	display: flex;
+	justify-content: space-between; /* Распределяем элементы равномерно по ширине контейнера */
+	align-items: center; /* Выравниваем элементы по вертикали */
+}
+.todoText {
+	flex: 1;
+	text-align: left;
+	max-width: 400px;
+}
+.todoControl {
+	display: flex;
+	gap: 10px;
 }
 
+.addButton {
+	margin-left: 20px;
+}
+.inputNewTodo {
+	height: 30px;
+	width: 200px;
+	outline: none;
+	border: 1px solid black;
+}
+.inputNewTodo:focus {
+	border-color: black;
+	background-color: rgb(44, 48, 66);
+}
 .loader {
 	width: 48px;
 	height: 48px;

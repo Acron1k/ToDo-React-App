@@ -8,6 +8,7 @@ import {
 import styles from './App.module.css';
 
 function App() {
+	const [inputText, setInputText] = useState('');
 	const [refreshTodosFlag, setRefreshTodosFlag] = useState(false);
 
 	const refreshTodos = () => setRefreshTodosFlag(!refreshTodosFlag);
@@ -22,30 +23,45 @@ function App() {
 
 	return (
 		<div className={styles.app}>
-			<button onClick={requestAddNewToDo} disabled={isLoading}>
-				Добавть новую тудушку
-			</button>
+			<form>
+				<input
+					type="text"
+					value={inputText}
+					onChange={(e) => setInputText(e.target.value)}
+					className={styles.inputNewTodo}
+				/>
+				<button onClick={() => requestAddNewToDo(inputText)} disabled={isLoading} className={styles.addButton}>
+					Добавть новую тудушку
+				</button>
+			</form>
 			<br />
-			{isLoading || isCreating || isDeleting || isUpdating ? (
-				<div className={styles.loader}></div>
-			) : (
-				Object.entries(todos).map(([id, { title, completed }]) => (
-					<div key={id}>
-						{id}. {title}
-						<input
-							type="checkbox"
-							checked={completed}
-							onChange={() => {
-								toggleTodoCompletion(id, !completed);
-							}}
-							disabled={isUpdating}
-						/>
-						<button disabled={isDeleting} onClick={() => requestDeleteToDo(id)}>
-							Удалить
-						</button>
-					</div>
-				))
-			)}
+			<div className={styles.todosList}>
+				{isLoading || isCreating || isDeleting || isUpdating ? (
+					<div className={styles.loader}></div>
+				) : (
+					Object.entries(todos).map(([id, { title, completed }]) => (
+						<div key={id} className={styles.todoElement}>
+							<p className={styles.todoText}>{title}</p>
+							<input
+								type="checkbox"
+								checked={completed}
+								onChange={() => {
+									toggleTodoCompletion(id, !completed);
+								}}
+								disabled={isUpdating}
+								className={styles.todoControl}
+							/>
+							<button
+								disabled={isDeleting}
+								onClick={() => requestDeleteToDo(id)}
+								className={styles.todoControl}
+							>
+								Удалить
+							</button>
+						</div>
+					))
+				)}
+			</div>
 		</div>
 	);
 }
