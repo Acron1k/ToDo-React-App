@@ -6,37 +6,60 @@ import {
 	useRequestToogleTodoCompletion,
 } from './hooks';
 import styles from './App.module.css';
+import sortImg from './assets/sort.svg';
 
 function App() {
 	const [inputText, setInputText] = useState('');
-	const [refreshTodosFlag, setRefreshTodosFlag] = useState(false);
+	// const [refreshTodosFlag, setRefreshTodosFlag] = useState(false);
+	const [searchText, setSearchText] = useState('');
+	const [isSorted, setIsSorted] = useState(false);
 
-	const refreshTodos = () => setRefreshTodosFlag(!refreshTodosFlag);
+	// const refreshTodos = () => setRefreshTodosFlag(!refreshTodosFlag);
 
-	const { isLoading, todos } = useRequestGetTodos();
+	const { isLoading, todos } = useRequestGetTodos(searchText, isSorted);
 
-	const { requestAddNewToDo, isCreating } = useRequestAddNewTodo(refreshTodos);
+	const { requestAddNewToDo, isCreating } = useRequestAddNewTodo();
 
-	const { requestDeleteToDo, isDeleting } = useRequestDeleteTodo(refreshTodos);
+	const { requestDeleteToDo, isDeleting } = useRequestDeleteTodo();
 
-	const { toggleTodoCompletion, isUpdating } = useRequestToogleTodoCompletion(refreshTodos);
+	const { toggleTodoCompletion, isUpdating } = useRequestToogleTodoCompletion();
 
 	return (
 		<div className={styles.app}>
+			<div className={styles.header}>
+				<h1>ToDo</h1>
+				<div className={styles.filter}>
+					<input
+						type="text"
+						placeholder="Поиск..."
+						className={styles.searchInput}
+						value={searchText}
+						onChange={(e) => setSearchText(e.target.value)}
+					/>
+					<button
+						className={`${styles.sortButton} ${isSorted ? styles.active : ''}`}
+						onClick={() => setIsSorted((prev) => !prev)}
+					>
+						<img src={sortImg} alt="Sort" className={styles.sort} />
+					</button>
+				</div>
+			</div>
+
 			<form>
 				<input
 					type="text"
 					value={inputText}
 					onChange={(e) => setInputText(e.target.value)}
 					className={styles.inputNewTodo}
+					placeholder="Напиши новую задачу..."
 				/>
 				<button onClick={() => requestAddNewToDo(inputText)} disabled={isLoading} className={styles.addButton}>
-					Добавть новую тудушку
+					Добавить
 				</button>
 			</form>
 			<br />
 			<div className={styles.todosList}>
-				{isLoading || isCreating || isDeleting ? (
+				{isLoading || isCreating ? (
 					<div className={styles.loader}></div>
 				) : (
 					Object.entries(todos).map(([id, { title, completed }]) => (
@@ -63,10 +86,10 @@ function App() {
 										/>
 										<g transform="translate(0,-1002.3622)">
 											<path
-												d="m 15,1033 c 11,-9 27,2 39,-1 4,-1 7,-3 12,-3 11,0 20,2 30,7 5,2 42,2 48,0 4,-2 8,-3 13,-6 7,-3 26,0 35,0 14,0 28,-3 42,-3 37,0 73,6 107,-2 6,-1 18,-0.01 24,2 3,1 7,-0 11,0 21,4 42,2 63,-4 14,-4 49,12 55,7"
-												stroke="black"
+												d="M 15,1033 c 8,-7 20,1 28,-1 3,-1 6,-2 10,-2 9,0 16,1 24,5 4,1 32,1 36,0 3,-1 6,-2 9,-4 5,-2 20,0 27,0 11,0 22,-2 32,-2 28,0 55,4 81,-1 4,-1 11,0 14,2 2,1 6,-0 9,0 18,3 36,2 53,-2 11,-2 37,8 41,5 L 500,1033"
+												stroke="#1b1b1b"
 												fill="none"
-												strokeWidth="3"
+												strokeWidth="5"
 												className={styles.path2}
 											/>
 										</g>
