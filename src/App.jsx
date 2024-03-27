@@ -7,6 +7,7 @@ import {
 } from './hooks';
 import styles from './App.module.css';
 import sortImg from './assets/sort.svg';
+import debounce from 'debounce';
 
 function App() {
 	const [inputText, setInputText] = useState('');
@@ -33,8 +34,8 @@ function App() {
 						type="text"
 						placeholder="Поиск..."
 						className={styles.searchInput}
-						value={searchText}
-						onChange={(e) => setSearchText(e.target.value)}
+						// value={searchText}
+						onChange={debounce((e) => setSearchText(e.target.value), 500)}
 					/>
 					<button
 						className={`${styles.sortButton} ${isSorted ? styles.active : ''}`}
